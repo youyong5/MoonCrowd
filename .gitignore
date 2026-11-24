@@ -3,5 +3,7 @@ target/
 .mooncakes/
 web/mooncrowd.js
 web/mooncrowd.js.map
+web/NOTICE.txt
+web/LICENSE.txt
 *.exe
 *.o
