@@ -42,6 +42,13 @@ pub(all) struct AgentDiagnostics {
 }
 
 #derive(Eq, @debug.Debug)
+pub(all) struct AgentOverlap {
+  first : Int32
+  second : Int32
+  clearance : Double
+}
+
+#derive(Eq, @debug.Debug)
 pub(all) struct AgentState {
   id : Int32
   position : Vec2
@@ -51,10 +58,33 @@ pub(all) struct AgentState {
 }
 
 #derive(Eq, @debug.Debug)
+pub(all) struct AuditReport {
+  step : Int32
+  time : Double
+  tolerance : Double
+  agent_overlap_count : Int32
+  obstacle_overlap_count : Int32
+  details_truncated : Bool
+  agent_overlaps : Array[AgentOverlap]
+  obstacle_overlaps : Array[ObstacleOverlap]
+  minimum_agent_clearance : Double?
+  minimum_obstacle_clearance : Double?
+}
+pub fn AuditReport::is_clear(Self) -> Bool
+
+#derive(Eq, @debug.Debug)
 pub(all) struct Constraint {
   point : Vec2
   direction : Vec2
   obstacle : Bool
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) struct ObstacleOverlap {
+  agent : Int32
+  obstacle : Int32
+  clearance : Double
+  center_inside : Bool
 }
 
 pub struct Simulator {
@@ -63,9 +93,12 @@ pub struct Simulator {
 pub fn Simulator::add_agent(Self, Vec2, config? : AgentConfig, velocity? : Vec2) -> Int32 raise CrowdError
 pub fn Simulator::add_obstacle(Self, Array[Vec2]) -> Int32 raise CrowdError
 pub fn Simulator::agent(Self, Int32) -> AgentState raise CrowdError
+pub fn Simulator::audit(Self, tolerance? : Double, max_details? : Int32) -> AuditReport raise CrowdError
 pub fn Simulator::new(time_step? : Double) -> Self raise CrowdError
 pub fn Simulator::remove_agent(Self, Int32) -> Unit raise CrowdError
 pub fn Simulator::remove_obstacle(Self, Int32) -> Unit raise CrowdError
+pub fn Simulator::set_config(Self, Int32, AgentConfig) -> Unit raise CrowdError
+pub fn Simulator::set_preferred_velocities(Self, Array[(Int32, Vec2)]) -> Unit raise CrowdError
 pub fn Simulator::set_preferred_velocity(Self, Int32, Vec2) -> Unit raise CrowdError
 pub fn Simulator::set_state(Self, Int32, Vec2, Vec2) -> Unit raise CrowdError
 pub fn Simulator::snapshot(Self) -> Snapshot
