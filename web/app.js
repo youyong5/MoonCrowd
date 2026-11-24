@@ -5,7 +5,7 @@
   const canvas = $('canvas'), ctx = canvas.getContext('2d');
   const names = ['环形交换','交叉人流','狭窄通道'];
   const descriptions = ['从圆周走向对侧。微小的侧向偏好帮助打破完美对称。','两组个体沿相反方向穿过彼此，观察让路与流线的形成。','演示提供门口途经点，个体通过宽度有限的通道。'];
-  let kind = 0, state = null, running = false, selected = null, last = 0, accumulator = 0;
+  let kind = 0, state = null, running = false, faulted = false, selected = null, last = 0, accumulator = 0;
   const history = new Map();
   function decode(raw) {
     const value = JSON.parse(raw);
@@ -13,16 +13,20 @@
     return value;
   }
   function fail(err) {
-    running = false;
+    running = false; faulted = true; accumulator = 0;
+    $('play').disabled = true; $('step').disabled = true;
     $('error').hidden = false;
     $('error').textContent = err.message;
     $('status').textContent = '已停止';
     $('play').textContent = '开始运行';
   }
-  function reset() {
+  function reset(candidateKind = kind) {
     try {
       if (!globalThis.MoonCrowd) throw new Error('请先运行 python3 tools/build_web.py 生成 MoonBit 演示。');
-      state = decode(MoonCrowd.reset(kind, Number($('count').value)));
+      const next = decode(MoonCrowd.reset(candidateKind, Number($('count').value)));
+      state = next; kind = candidateKind; faulted = false;
+      $('play').disabled = false; $('step').disabled = false;
+      for(const button of document.querySelectorAll('[data-scene]'))button.setAttribute('aria-pressed',String(Number(button.dataset.scene)===kind));
       selected = null; history.clear(); accumulator = 0;
       $('error').hidden = true;
       $('scene-name').textContent = names[kind];
@@ -31,6 +35,7 @@
     } catch (err) { fail(err); }
   }
   function advance() {
+    if (faulted || !state) return;
     try {
       state = decode(MoonCrowd.step());
       for (const a of state.agents) {
@@ -55,7 +60,7 @@
     $('violations').style.color = state.violations ? '#e8ac8d' : '';
     const average = state.agents.reduce((s,a) => s+Math.hypot(a[3],a[4]),0)/state.agents.length;
     $('speed').textContent = average.toFixed(2);
-    $('status').textContent = running ? '运行中' : '已暂停';
+    $('status').textContent = faulted ? '已停止' : (running ? '运行中' : '已暂停');
     $('play').textContent = running ? '暂停' : '开始运行';
     const a = state.agents.find(a => a[0] === selected);
     const d = (state.diagnostics || []).find(d => d[0] === selected);
@@ -95,15 +100,15 @@
     }
   }
   function frame(now) {
-    if(running && state){accumulator+=Math.min((now-last)/1000,.25);let steps=0;while(accumulator>=.05 && steps<5 && running){advance();accumulator-=.05;steps++;}}
+    if(running && !faulted && state){accumulator+=Math.min((now-last)/1000,.25);let steps=0;while(accumulator>=.05 && steps<5 && running){advance();accumulator-=.05;steps++;}}
     last=now;draw();requestAnimationFrame(frame);
   }
-  $('play').onclick=()=>{running=!running;accumulator=0;update();};
+  $('play').onclick=()=>{if(faulted||!state)return;running=!running;accumulator=0;update();};
   $('step').onclick=()=>{running=false;advance();update();draw();};
-  $('reset').onclick=reset;
+  $('reset').onclick=()=>reset();
   $('count').oninput=()=>{$('count-value').textContent=$('count').value;};
-  $('count').onchange=reset;
-  for(const button of document.querySelectorAll('[data-scene]'))button.onclick=()=>{kind=Number(button.dataset.scene);for(const b of document.querySelectorAll('[data-scene]'))b.setAttribute('aria-pressed',String(b===button));reset();};
+  $('count').onchange=()=>reset();
+  for(const button of document.querySelectorAll('[data-scene]'))button.onclick=()=>reset(Number(button.dataset.scene));
   canvas.onclick=event=>{if(!state)return;const box=canvas.getBoundingClientRect(),s=Math.min(box.width/23,box.height/20);const x=(event.clientX-box.left-box.width/2)/s,y=-(event.clientY-box.top-box.height/2)/s;let distance=Infinity;selected=null;for(const a of state.agents){const d=Math.hypot(a[1]-x,a[2]-y);if(d<Math.max(a[5],.4)&&d<distance){distance=d;selected=a[0];}}update();draw();};
   reset();requestAnimationFrame(frame);
 })();
