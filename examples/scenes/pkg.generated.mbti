@@ -1,0 +1,26 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "youyong5/mooncrowd/examples/scenes"
+
+import {
+  "youyong5/mooncrowd",
+}
+
+// Values
+pub fn create(Int32, Int32) -> Scene raise @mooncrowd.CrowdError
+
+// Errors
+
+// Types and methods
+pub struct Scene {
+  simulator : @mooncrowd.Simulator
+  walls : Array[Array[@mooncrowd.Vec2]]
+  kind : Int32
+  // private fields
+}
+pub fn Scene::advance(Self) -> @mooncrowd.StepReport raise @mooncrowd.CrowdError
+pub fn Scene::arrived(Self) -> Int32
+pub fn Scene::minimum_clearance(Self) -> Double
+
+// Type aliases
+
+// Traits
