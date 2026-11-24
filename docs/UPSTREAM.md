@@ -26,6 +26,7 @@ RVO2 的最近提交并非全部算法更新；机器人依赖更新不能作为
 | orca.mbt | 从 src/Agent.cc 的个体/障碍 ORCA 约束生成移植 |
 | neighbors.mbt | 自行实现包围盒树；没有照搬上游 KdTree 源码 |
 | simulator.mbt | 自行实现校验、稳定句柄、几何检查、生命周期、提交与诊断 |
+| audit.mbt / updates.mbt | 自行实现全场几何审计、明细预算、原子宿主批量输入与配置校验 |
 | vector.mbt / types.mbt | MoonCrowd 值类型与基础数值操作 |
 | tools/oracle.cpp | 自行编写的驱动；构建时链接未修改的固定版上游源码 |
 | oracle_wbtest.mbt / tests/fixtures/rvo2.json | 驱动上游生成的参考数据，非手写求解器源码 |

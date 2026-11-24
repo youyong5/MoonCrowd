@@ -5,6 +5,9 @@
 - Port pinned RVO2 disc and obstacle ORCA constraints and LP fallback to MoonBit Double.
 - Add deterministic neighbor tree, stable IDs, input/geometry validation and atomic stepping.
 - Add per-agent constraints, residuals, truncation and overlap diagnostics.
+- Add exact global geometric overlap counts and signed clearances with bounded detail arrays.
+- Add atomic host preference batches and validated runtime config updates.
+- Surface geometry metrics in CLI/browser alongside velocity-constraint residuals.
 - Add independent in-memory checkpoints and arrival-velocity helper.
 - Add four-backend regression tests and 2,304 independent RVO2 state fixtures.
 - Add CLI scenarios, static browser demo, separate-module consumer test and CI workflows.

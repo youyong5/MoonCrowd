@@ -4,13 +4,13 @@
 
 | 要求 | 证据 | 当前状态 |
 | --- | --- | --- |
-| MoonBit 为主、工具链满足要求 | 核心六个 .mbt 文件，无外部算法运行时；验证 moonc v0.10.22 | 已本地验证 |
+| MoonBit 为主、工具链满足要求 | 核心八个 .mbt 文件，无外部算法运行时；验证 moonc v0.10.22 | 已本地验证 |
 | 公开 GitHub、清晰提交 | 本地 Git 按实现、测试、示例、文档分阶段记录 | 尚未创建/推送远程 |
 | 结构清晰、核心功能可完成 | root 库、examples 消费者、tools 独立验证、web 展示 | 已实现声明范围 |
 | README、安装、使用与示例 | README、CONTRACT、UPSTREAM、独立消费者脚本 | 已提供并执行核心示例 |
 | 持续集成检查/构建/测试 | .github/workflows/ci.yml | 工作流已编写；远程未运行 |
 | 至少一个可运行样例 | Native CLI；MoonBit 编译 JS 示例 | 已执行 CLI 与适配逻辑；视觉验收待完成 |
-| 核心路径测试 | 四后端 46 项、上游差分、独立消费者 | 已本地通过 |
+| 核心路径测试 | 四后端 61 项、上游差分、独立消费者 | 已本地通过 |
 | 发布 mooncakes.io | 本地 moon package 清单及产物 | 未发布，发布前补实际 repository URL |
 | OSI 认可许可与来源合规 | Apache-2.0、NOTICE、两个移植文件版权头、UPSTREAM | 已落实当前所用源码归属 |
 
