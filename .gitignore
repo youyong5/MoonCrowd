@@ -1,1 +1,7 @@
-# GitHub import bootstrap; full original snapshots follow.
+_build/
+target/
+.mooncakes/
+web/mooncrowd.js
+web/mooncrowd.js.map
+*.exe
+*.o

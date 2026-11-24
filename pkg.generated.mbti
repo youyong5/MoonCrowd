@@ -1,0 +1,118 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "youyong5/mooncrowd"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+
+// Errors
+#derive(@debug.Debug)
+pub suberror CrowdError {
+  InvalidInput(String)
+  UnknownAgent(Int32)
+  UnknownObstacle(Int32)
+  NumericalFailure(String)
+}
+
+// Types and methods
+#derive(Eq, @debug.Debug)
+pub(all) struct AgentConfig {
+  radius : Double
+  max_speed : Double
+  neighbor_distance : Double
+  max_neighbors : Int32
+  time_horizon : Double
+  obstacle_horizon : Double
+}
+pub fn AgentConfig::default() -> Self
+
+#derive(Eq, @debug.Debug)
+pub(all) struct AgentDiagnostics {
+  id : Int32
+  neighbors : Int32
+  neighbors_truncated : Bool
+  obstacle_constraints : Int32
+  constraints : Array[Constraint]
+  used_fallback : Bool
+  max_violation : Double
+  overlapping_neighbors : Int32
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) struct AgentState {
+  id : Int32
+  position : Vec2
+  velocity : Vec2
+  preferred_velocity : Vec2
+  config : AgentConfig
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) struct Constraint {
+  point : Vec2
+  direction : Vec2
+  obstacle : Bool
+}
+
+pub struct Simulator {
+  dt : Double
+  mut tick : Int32
+  agents : Array[AgentState?]
+  obstacles : Array[Array[Vec2]?]
+}
+pub fn Simulator::add_agent(Self, Vec2, config? : AgentConfig, velocity? : Vec2) -> Int32 raise CrowdError
+pub fn Simulator::add_obstacle(Self, Array[Vec2]) -> Int32 raise CrowdError
+pub fn Simulator::agent(Self, Int32) -> AgentState raise CrowdError
+pub fn Simulator::new(time_step? : Double) -> Self raise CrowdError
+pub fn Simulator::remove_agent(Self, Int32) -> Unit raise CrowdError
+pub fn Simulator::remove_obstacle(Self, Int32) -> Unit raise CrowdError
+pub fn Simulator::set_preferred_velocity(Self, Int32, Vec2) -> Unit raise CrowdError
+pub fn Simulator::set_state(Self, Int32, Vec2, Vec2) -> Unit raise CrowdError
+pub fn Simulator::snapshot(Self) -> Snapshot
+pub fn Simulator::states(Self) -> Array[AgentState]
+pub fn Simulator::steer_toward(Self, Int32, Vec2, arrival_radius? : Double) -> Unit raise CrowdError
+pub fn Simulator::step(Self) -> StepReport raise CrowdError
+pub fn Simulator::step_count(Self) -> Int32
+pub fn Simulator::time(Self) -> Double
+pub fn Simulator::time_step(Self) -> Double
+
+pub struct Snapshot {
+  dt : Double
+  tick : Int32
+  agents : Array[AgentState?]
+  obstacles : Array[Array[Vec2]?]
+}
+pub fn Snapshot::restore(Self) -> Simulator
+
+#derive(Eq, @debug.Debug)
+pub(all) struct StepReport {
+  step : Int32
+  time : Double
+  agents : Array[AgentDiagnostics]
+  fallback_agents : Int32
+  violating_agents : Int32
+  neighbor_candidates : Int32
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) struct Vec2 {
+  x : Double
+  y : Double
+}
+pub fn Vec2::distance(Self, Self) -> Double
+pub fn Vec2::dot(Self, Self) -> Double
+pub fn Vec2::is_finite(Self) -> Bool
+pub fn Vec2::length(Self) -> Double
+pub fn Vec2::length_squared(Self) -> Double
+pub fn Vec2::new(Double, Double) -> Self
+pub fn Vec2::scale(Self, Double) -> Self
+pub fn Vec2::zero() -> Self
+pub impl Add for Vec2
+pub impl Neg for Vec2
+pub impl Sub for Vec2
+
+// Type aliases
+
+// Traits
