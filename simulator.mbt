@@ -60,6 +60,9 @@ pub fn Simulator::add_agent(
   validate_vector(position)
   validate_vector(velocity)
   validate_config(config)
+  if config.time_horizon < self.dt || config.obstacle_horizon < self.dt {
+    raise InvalidInput("prediction horizons must be at least time_step")
+  }
   if velocity.length() > config.max_speed + 1.0e-9 {
     raise InvalidInput("initial velocity exceeds max_speed")
   }

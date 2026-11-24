@@ -11,6 +11,17 @@ pub suberror CrowdError {
 }
 
 ///|
+/// Human-readable explanation for logging and adapters.
+pub fn CrowdError::message(self : CrowdError) -> String {
+  match self {
+    InvalidInput(message) => "invalid input: " + message
+    UnknownAgent(id) => "unknown agent: \{id}"
+    UnknownObstacle(id) => "unknown obstacle: \{id}"
+    NumericalFailure(message) => "numerical failure: " + message
+  }
+}
+
+///|
 /// Kinematic discs: velocities can change immediately, with no acceleration cap.
 #derive(Eq, Debug)
 pub(all) struct AgentConfig {
@@ -82,10 +93,10 @@ pub(all) struct StepReport {
 /// Independent value checkpoint. Mutating arrays returned by states() cannot
 /// mutate a simulator or a checkpoint. Restoring preserves IDs and step count.
 pub struct Snapshot {
-  dt : Double
-  tick : Int32
-  agents : Array[AgentState?]
-  obstacles : Array[Array[Vec2]?]
+  priv dt : Double
+  priv tick : Int32
+  priv agents : Array[AgentState?]
+  priv obstacles : Array[Array[Vec2]?]
 }
 
 ///|
@@ -101,10 +112,10 @@ priv struct Edge {
 
 ///|
 pub struct Simulator {
-  dt : Double
-  mut tick : Int32
-  agents : Array[AgentState?]
-  obstacles : Array[Array[Vec2]?]
+  priv dt : Double
+  priv mut tick : Int32
+  priv agents : Array[AgentState?]
+  priv obstacles : Array[Array[Vec2]?]
 }
 
 ///|
