@@ -39,4 +39,6 @@ jobs:
           bash /tmp/install-moonbit.sh
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - name: Verify JSON and the actual MoonBit reference assertions
-        run: python3 tools/generate_oracle.py --upstream /tmp/rvo2-reference --check
+        run: |
+          python3 tools/test_oracle_verifier.py
+          python3 tools/generate_oracle.py --upstream /tmp/rvo2-reference --check

@@ -43,6 +43,7 @@ def main():
     if destination.suffix.lower() != '.zip':
         raise SystemExit('Release output must use .zip')
     require_clean()
+    run('python3', 'tools/test_oracle_verifier.py')
     if args.upstream is not None:
         run('python3', 'tools/generate_oracle.py', '--upstream',
             str(args.upstream.resolve()), '--check')
