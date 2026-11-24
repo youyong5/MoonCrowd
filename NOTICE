@@ -1,0 +1,18 @@
+MoonCrowd
+Copyright 2026 MoonCrowd contributors
+
+This product includes adaptations of RVO2 Library:
+Copyright 2008 University of North Carolina at Chapel Hill
+Authors: Jur van den Berg, Stephen J. Guy, Jamie Snape,
+Ming C. Lin, and Dinesh Manocha.
+https://github.com/snape/RVO2
+https://gamma.cs.unc.edu/RVO2/
+Source commit: 6b4eb00a93a9f3abf723235ff006d6aad3e2f212
+
+lp.mbt and orca.mbt adapt RVO2 src/Agent.cc under Apache-2.0.
+Changes include MoonBit/Double translation, value-based interfaces, explicit
+solver diagnostics, and stable-ID fallback for coincident-agent normalization.
+Other handwritten MoonCrowd components are separately described in
+docs/UPSTREAM.md. ORCA is prior work; MoonCrowd does not claim its invention.
+
+RVO2 README/documentation text is not copied into this distribution.
