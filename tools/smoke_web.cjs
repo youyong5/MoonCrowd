@@ -17,6 +17,17 @@ for (let scene=0;scene<3;scene++) {
     assert.equal(state.step,tick);
     assert.equal(state.diagnostics.length,48);
     assert.ok(state.agents.every(a=>a.slice(1).every(Number.isFinite)));
+    let overlaps=0, minimum=Infinity;
+    for(let i=0;i<state.agents.length;i++)for(let j=i+1;j<state.agents.length;j++){
+      const a=state.agents[i],b=state.agents[j];
+      const clearance=Math.hypot(a[1]-b[1],a[2]-b[2])-a[5]-b[5];
+      minimum=Math.min(minimum,clearance);
+      if(clearance < -1e-7)overlaps++;
+    }
+    assert.equal(state.overlaps,overlaps);
+    assert.ok(Math.abs(state.clearance-minimum)<1e-9);
+    assert.equal(state.overlap_pairs.length,state.overlaps);
+    assert.ok(Number.isInteger(state.obstacle_overlaps));
   }
 }
 class Element {
@@ -45,4 +56,6 @@ elements.count.value='36';elements.count.oninput();elements.count.onchange();
 assert.equal(elements['count-value'].textContent,'36');
 assert.equal(elements.arrived.textContent,'0 / 36');
 assert.equal(elements.error.hidden,true);
+assert.equal(elements.overlaps.textContent,'0');
+assert.ok(Number.isFinite(Number(elements.clearance.textContent)));
 console.log('Browser adapter: 3 x 80 steps; UI control wiring: passed (DOM stub, no layout assertions).');

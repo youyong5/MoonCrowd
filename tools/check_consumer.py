@@ -16,10 +16,11 @@ with tempfile.TemporaryDirectory(prefix='mooncrowd-consumer-') as directory:
     (app/'consumer.mbt').write_text('''pub fn exercise() -> Bool raise @crowd.CrowdError {
   let sim = @crowd.Simulator::new()
   let id = sim.add_agent(@crowd.Vec2::new(-2.0, 0.0))
-  sim.steer_toward(id, @crowd.Vec2::new(2.0, 0.0))
+  sim.set_config(id, { ..@crowd.AgentConfig::default(), radius: 0.25 })
+  sim.set_preferred_velocities([(id, @crowd.Vec2::new(1.0, 0.0))])
   let checkpoint = sim.snapshot()
   let report = sim.step()
-  report.step == 1 && sim.agent(id).position.x > -2.0 && checkpoint.restore().step_count() == 0
+  report.step == 1 && sim.audit().is_clear() && sim.agent(id).position.x > -2.0 && checkpoint.restore().step_count() == 0
 }
 ''')
     (app/'consumer_wbtest.mbt').write_text('test "independent public API consumer" { assert_true(exercise()) }\n')

@@ -14,14 +14,23 @@ fn encode(
   violations : Int32,
   fallbacks : Int32,
   diagnostics~ : String = "[]",
-) -> String {
+) -> String raise @crowd.CrowdError {
   let states = scene.simulator.states()
+  let audit = scene.simulator.audit(max_details=20000)
+  let minimum = match audit.minimum_agent_clearance {
+    Some(value) => "\{value}"
+    None => "null"
+  }
+  let pairs = audit.agent_overlaps
+    .map(p => "[\{p.first},\{p.second}]")
+    .join(",")
+  let contacts = audit.obstacle_overlaps.map(p => "\{p.agent}").join(",")
   let agents = states
     .map(a => {
       "[\{a.id},\{a.position.x},\{a.position.y},\{a.velocity.x},\{a.velocity.y},\{a.config.radius}]"
     })
     .join(",")
-  "{\"step\":\{scene.simulator.step_count()},\"time\":\{scene.simulator.time()},\"arrived\":\{scene.arrived()},\"violations\":\{violations},\"fallbacks\":\{fallbacks},\"agents\":[\{agents}],\"diagnostics\":\{diagnostics}}"
+  "{\"step\":\{scene.simulator.step_count()},\"time\":\{scene.simulator.time()},\"arrived\":\{scene.arrived()},\"violations\":\{violations},\"fallbacks\":\{fallbacks},\"agents\":[\{agents}],\"diagnostics\":\{diagnostics},\"overlaps\":\{audit.agent_overlap_count},\"obstacle_overlaps\":\{audit.obstacle_overlap_count},\"clearance\":\{minimum},\"overlap_pairs\":[\{pairs}],\"obstacle_contacts\":[\{contacts}]}"
 }
 
 ///|

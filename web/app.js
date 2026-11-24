@@ -47,6 +47,10 @@
     $('clock').textContent = state.time.toFixed(2) + ' s';
     $('ticks').textContent = state.step;
     $('arrived').textContent = state.arrived + ' / ' + state.agents.length;
+    $('overlaps').textContent = state.overlaps;
+    $('clearance').textContent = state.clearance === null ? '—' : state.clearance.toFixed(4);
+    $('overlaps').style.color = state.overlaps ? '#ef9e91' : '';
+    $('clearance').style.color = state.clearance < -1e-7 ? '#ef9e91' : '';
     $('violations').textContent = state.violations;
     $('violations').style.color = state.violations ? '#e8ac8d' : '';
     const average = state.agents.reduce((s,a) => s+Math.hypot(a[3],a[4]),0)/state.agents.length;
@@ -57,6 +61,7 @@
     const d = (state.diagnostics || []).find(d => d[0] === selected);
     $('selected-id').textContent = a ? '#' + a[0] : '—';
     $('inspector').textContent = a ? `位置 (${a[1].toFixed(2)}, ${a[2].toFixed(2)}) · 速度 ${Math.hypot(a[3],a[4]).toFixed(2)}` +
+      ((state.obstacle_contacts||[]).includes(a[0]) ? ' · 障碍接触' : '') +
       (d ? ` · 邻居 ${d[1]}${d[2]?'（已截断）':''} · 最大约束违反 ${d[4].toExponential(1)}` : '') : '点击画布中的圆点，查看它的位置、速度与邻居数量。';
   }
   function dimensions() {
@@ -78,12 +83,14 @@
     if(kind===0){ctx.setLineDash([3,6]);ctx.beginPath();ctx.arc(w/2,h/2,8*s,0,Math.PI*2);ctx.strokeStyle='#344849';ctx.stroke();ctx.setLineDash([]);}
     if(kind===2){ctx.lineWidth=5;ctx.strokeStyle='#749397';for(const [y1,y2] of [[-9,-1.2],[1.2,9]]){const a=point(0,y1),b=point(0,y2);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();}}
     if(!state)return;
+    const contacts=new Set((state.overlap_pairs||[]).flat().concat(state.obstacle_contacts||[]));
     for(const a of state.agents){
       const color=(kind===0?a[0]<state.agents.length/2:a[0]%2===0)?'#83d8c6':'#e8ac8d';
       const p=point(a[1],a[2]),r=Math.max(2.5,a[5]*s);
       if($('trails').checked){const trail=history.get(a[0])||[];ctx.beginPath();trail.forEach((p,i)=>{const q=point(...p);i?ctx.lineTo(...q):ctx.moveTo(...q);});ctx.lineWidth=1;ctx.strokeStyle=color+'45';ctx.stroke();}
       ctx.beginPath();ctx.arc(...p,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
       if($('vectors').checked || a[0]===selected){const end=point(a[1]+a[3]*.6,a[2]+a[4]*.6);ctx.beginPath();ctx.moveTo(...p);ctx.lineTo(...end);ctx.lineWidth=1.2;ctx.strokeStyle=color;ctx.stroke();}
+      if(contacts.has(a[0])){ctx.beginPath();ctx.arc(...p,r+2,0,Math.PI*2);ctx.strokeStyle='#ef9e91';ctx.lineWidth=1.5;ctx.stroke();}
       if(a[0]===selected){ctx.beginPath();ctx.arc(...p,r+5,0,Math.PI*2);ctx.strokeStyle='#ecf6f2';ctx.lineWidth=1;ctx.stroke();}
     }
   }
