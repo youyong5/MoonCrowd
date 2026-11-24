@@ -130,3 +130,7 @@ moon test --target all --deny-warn
 ## 许可证
 
 [Apache-2.0](LICENSE)。移植来源、原作者和修改说明见 [NOTICE](NOTICE) 与 [UPSTREAM.md](docs/UPSTREAM.md)。
+
+## 压缩包中的开发历史
+
+源码交付压缩包另附 `SOURCE_HISTORY.bundle`，保存本地 Git 提交；该文件不是库的运行依赖。需要恢复提交历史时，可在解压目录运行 `git clone SOURCE_HISTORY.bundle ../MoonCrowd-history`。网页编译产物属于交付文件，未提交到源码历史，恢复后可重新构建。
