@@ -33,8 +33,10 @@ jobs:
           git init /tmp/rvo2-reference
           git -C /tmp/rvo2-reference fetch --depth=1 https://github.com/snape/RVO2.git 6b4eb00a93a9f3abf723235ff006d6aad3e2f212
           git -C /tmp/rvo2-reference checkout --detach FETCH_HEAD
-      - run: python3 tools/generate_oracle.py --upstream /tmp/rvo2-reference
-      - name: Check reference data reproducibility
-        run: git diff --exit-code -- tests/fixtures/rvo2.json
-      # Generated MoonBit is formatted by `moon fmt` after regeneration; the
-      # backend job tests its checked-in numerical values against the core.
+      - name: Install formatter for independent reference verification
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh -o /tmp/install-moonbit.sh
+          bash /tmp/install-moonbit.sh
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Verify JSON and the actual MoonBit reference assertions
+        run: python3 tools/generate_oracle.py --upstream /tmp/rvo2-reference --check
