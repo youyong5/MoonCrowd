@@ -4,7 +4,7 @@
 
 MoonCrowd 为游戏、仿真和交互程序提供可独立调用的圆形移动体避障、静态障碍约束、邻居查询与固定时间步仿真。核心用 MoonBit 实现，不依赖浏览器、C++ 动态库、服务器或特定游戏引擎。网页与命令行程序都是公共 API 的消费者。
 
-当前为 **0.1.0 开发版本**，尚未推送远程仓库或发布 Mooncakes。下文提供本地完整复现方式；发布后的包名计划为 `youyong5/mooncrowd`。
+当前为 **0.1.0 开发版本**，源码已公开至 [GitHub](https://github.com/youyong5/MoonCrowd)，尚未发布 Mooncakes。下文提供完整复现方式；发布后的包名计划为 `youyong5/mooncrowd`。首次远程导入的提交映射和原始历史恢复方式见 [GIT_IMPORT.md](docs/GIT_IMPORT.md)。
 
 ## 核心能力
 
@@ -131,7 +131,7 @@ moon fmt
 moon test --target all --deny-warn
 ```
 
-只检查参考文件是否与固定上游一致，可运行 `python3 tools/generate_oracle.py --upstream ../RVO2 --check`。此命令在临时目录生成并格式化测试代码，同时比对 JSON 和实际测试断言，不修改当前文件；上游 `src/` 必须干净且没有未跟踪文件。
+只检查参考文件是否与固定上游一致，可运行 `python3 tools/generate_oracle.py --upstream ../RVO2 --check`。此命令严格核对场景和元数据，对重新编译的上游分量允许最多 `1e-5` 的绝对浮点尾差，再由已保存的 JSON 重建并逐字节核对格式化后的实际测试断言；库测试容差仍为 `1e-4`。命令不修改当前文件；上游 `src/` 必须干净且没有未跟踪文件。
 
 ## 交付前统一检查与打包
 

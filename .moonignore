@@ -3,3 +3,4 @@ tools/
 tests/fixtures/
 SOURCE_HISTORY.bundle
 __pycache__/
+history/
