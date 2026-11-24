@@ -1,3 +1,5 @@
 web/
 tools/
 tests/fixtures/
+SOURCE_HISTORY.bundle
+__pycache__/
