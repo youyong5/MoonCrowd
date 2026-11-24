@@ -12,3 +12,6 @@
 - Add four-backend regression tests and 2,304 independent RVO2 state fixtures.
 - Add CLI scenarios, static browser demo, separate-module consumer test and CI workflows.
 - Document model assumptions, infeasibility, numerical limits and licensing boundaries.
+- Lock failed demo controls until successful reset; keep selected scene consistent on reset failure.
+- Verify both reference JSON and formatted MoonBit assertions from a clean pinned upstream checkout.
+- Add a checked local release command with tracked-source packaging, Git history and SHA-256 manifest.

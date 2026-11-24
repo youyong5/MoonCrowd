@@ -131,6 +131,22 @@ moon fmt
 moon test --target all --deny-warn
 ```
 
+只检查参考文件是否与固定上游一致，可运行 `python3 tools/generate_oracle.py --upstream ../RVO2 --check`。此命令在临时目录生成并格式化测试代码，同时比对 JSON 和实际测试断言，不修改当前文件；上游 `src/` 必须干净且没有未跟踪文件。
+
+## 交付前统一检查与打包
+
+在干净的 Git 源码目录中执行：
+
+```sh
+python3 tools/release.py --output ../releases/MoonCrowd-0.1.0.zip
+```
+
+如果也要从原版重新核验参考数据，追加 `--upstream ../RVO2`。脚本需要 MoonBit、Git、Python 3、Node 和宿主 C 编译器；重新构建原版 oracle 还需要 G++。
+
+脚本会运行格式检查、四后端检查/构建/测试、独立消费者和网页接口测试，然后打包已跟踪源码、编译后的静态演示、Git 历史与 `MANIFEST.sha256` 文件校验清单。未提交或未跟踪的源码会阻止打包，输出目录必须在源码目录之外。该脚本只生成本地交付包，不推送或发布。
+
+演示求解/重置失败时会保留最后成功的画面并停用运行与单步，成功重置后恢复；错误路径也有注入故障的控制逻辑测试。真实浏览器视觉验收的状态仍见验证记录。
+
 ## 许可证
 
 [Apache-2.0](LICENSE)。移植来源、原作者和修改说明见 [NOTICE](NOTICE) 与 [UPSTREAM.md](docs/UPSTREAM.md)。

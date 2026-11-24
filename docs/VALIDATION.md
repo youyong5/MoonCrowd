@@ -25,7 +25,7 @@ moonrun 0.1.20261119 (738607b 2026-11-19)
 | `python3 tools/check_consumer.py` | 独立模块公共 API 测试，四后端各 1/1 |
 | `moon run examples/cli --target native --release` | 三种场景均完成 400 步并输出诊断 |
 | `python3 tools/build_web.py` | 真实 MoonBit JS 产物构建成功 |
-| `node tools/smoke_web.cjs` | 三场景各 80 步；DOM stub 下单步/运行/重置/切换/数量控制通过；JS 独立计算全部圆盘净空及重叠数并与适配输出对照 |
+| `node tools/smoke_web.cjs` | 三场景各 80 步；DOM stub 下控制逻辑及故障后停用/恢复通过；JS 独立计算全部圆盘净空及重叠数并与适配输出对照 |
 | `moon package --list` | 本地打包成功；仓库字段未设置有提示，发布前应填入实际远程 URL |
 
 四后端 61 项包括 24 项上游差分场景、34 项核心边界/行为测试，以及 3 项使用公共 API 的场景测试。独立消费者位于临时独立模块，通过 `moon.work` 接入本地源码；仅使用公开接口。
@@ -42,6 +42,10 @@ moonrun 0.1.20261119 (738607b 2026-11-19)
 - 不覆盖全部退化输入，不声称密集长时间轨迹与原版逐点相同。
 
 输入和输出位于 `tests/fixtures/rvo2.json`；可运行生成器从固定上游重建。普通测试使用已提交的 MoonBit 数值样本，不需要 Python、G++ 或网络。
+
+`generate_oracle.py --check` 另在临时目录重建并格式化测试断言，同时核对 JSON 与 `oracle_wbtest.mbt`，不覆盖原文件。实际执行通过；另外在临时副本故意改动一个测试容差，检查正确拒绝并保留被改文件；在临时上游副本加入未跟踪源文件，检查在编译前拒绝。CI 的 reference-oracle 任务已改为执行这项双文件核验，远程运行仍待推送。
+
+交付流程现在由 `tools/release.py` 统一执行检查、构建、测试与打包；仅接受干净 Git 源码目录和目录外的 ZIP 输出。归档仅使用已跟踪源码加明确列出的静态产物，附完整 Git bundle 与 SHA-256 文件清单；最终交付结果见归档中的相应源码提交。
 
 ## 400 步场景结果
 
