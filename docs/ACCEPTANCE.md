@@ -5,13 +5,13 @@
 | 要求 | 证据 | 当前状态 |
 | --- | --- | --- |
 | MoonBit 为主、工具链满足要求 | 核心八个 .mbt 文件，无外部算法运行时；验证 moonc v0.10.22 | 已本地验证 |
-| 公开 GitHub、清晰提交 | 本地 Git 按实现、测试、示例、文档分阶段记录 | 尚未创建/推送远程 |
+| 公开 GitHub、清晰提交 | 本地 Git 按实现、测试、示例、文档分阶段记录 | 公开仓库已创建；源码推送与远程核验待完成 |
 | 结构清晰、核心功能可完成 | root 库、examples 消费者、tools 独立验证、web 展示 | 已实现声明范围 |
 | README、安装、使用与示例 | README、CONTRACT、UPSTREAM、独立消费者脚本 | 已提供并执行核心示例 |
 | 持续集成检查/构建/测试 | .github/workflows/ci.yml；上游 JSON 与实际断言的双文件核验 | 工作流已编写；远程未运行 |
 | 至少一个可运行样例 | Native CLI；MoonBit 编译 JS 示例 | 已执行 CLI 与适配逻辑；视觉验收待完成 |
 | 核心路径测试 | 四后端 61 项、上游差分、独立消费者 | 已本地通过 |
-| 发布 mooncakes.io | 本地 moon package 清单及产物 | 未发布，发布前补实际 repository URL |
+| 发布 mooncakes.io | 本地 moon package 清单及产物；已填写实际 repository URL | 未发布 |
 | OSI 认可许可与来源合规 | Apache-2.0、NOTICE、两个移植文件版权头、UPSTREAM | 已落实当前所用源码归属 |
 
 验收材料不能写成“任意场景无碰撞”“原创 ORCA”“跨平台位级一致”“万人实时”或“已公开发布”。应强调通用 MoonBit 内核、模型边界、工程增量和可复现证据。

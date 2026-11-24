@@ -6,6 +6,8 @@ readme = "README.md"
 
 license = "Apache-2.0"
 
+repository = "https://github.com/youyong5/MoonCrowd"
+
 keywords = [ "crowd", "orca", "collision-avoidance", "simulation" ]
 
 description = "Renderer-independent 2D reciprocal collision avoidance with validated inputs and solver diagnostics, in MoonBit."
