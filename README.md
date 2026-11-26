@@ -4,7 +4,7 @@
 
 MoonCrowd 为游戏、仿真和交互程序提供可独立调用的圆形移动体避障、静态障碍约束、邻居查询与固定时间步仿真。核心用 MoonBit 实现，不依赖浏览器、C++ 动态库、服务器或特定游戏引擎。网页与命令行程序都是公共 API 的消费者。
 
-当前版本为 **0.1.0**，源码已公开至 [GitHub](https://github.com/youyong5/MoonCrowd)，尚未发布 Mooncakes。下文提供完整复现方式；发布后的包名计划为 `youyong5/mooncrowd`。首次远程导入的提交映射和原始历史恢复方式见 [GIT_IMPORT.md](docs/GIT_IMPORT.md)。
+当前版本为 **0.1.0**，源码已公开至 [GitHub](https://github.com/youyong5/MoonCrowd)，并已发布到 [Mooncakes](https://mooncakes.io/docs/youyong5/mooncrowd@0.1.0/)。注册表精确版本为 `youyong5/mooncrowd@0.1.0`，已通过无工作区覆盖的四后端独立消费验证；证据见 [REGISTRY-VALIDATION.md](docs/REGISTRY-VALIDATION.md)。首次远程导入的提交映射和原始历史恢复方式见 [GIT_IMPORT.md](docs/GIT_IMPORT.md)。
 
 ## 核心能力
 
@@ -91,7 +91,7 @@ fn main {
 }
 ```
 
-发布后可使用 `moon add youyong5/mooncrowd`。发布前可用 `moon.work` 将本项目与消费者作为两个成员接入；`python3 tools/check_consumer.py` 会自动验证该接入方式，不依赖注册表中的包。`python3 tools/check_consumer.py --source package` 还会从实际打包 ZIP 验证相同公开接口；发布后使用 `--source registry --version 0.1.0` 验证真实注册表包，详见 [发布与消费验证](docs/PUBLISHING.md)。
+可使用 `moon add youyong5/mooncrowd@0.1.0` 安装已发布版本。本地开发也可用 `moon.work` 将本项目与消费者作为两个成员接入；`python3 tools/check_consumer.py` 会自动验证该接入方式，不依赖注册表中的包。`python3 tools/check_consumer.py --source package` 还会从实际打包 ZIP 验证相同公开接口；使用 `--source registry --version 0.1.0` 验证真实注册表包（四后端各 3/3 已通过），详见 [发布与消费验证](docs/PUBLISHING.md)。
 
 ### 静态交互演示
 

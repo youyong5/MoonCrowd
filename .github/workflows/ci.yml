@@ -69,3 +69,15 @@ jobs:
           name: mooncrowd-browser-report
           path: _build/browser-report/
           retention-days: 14
+  published-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install official current MoonBit toolchain
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh -o /tmp/install-moonbit.sh
+          bash /tmp/install-moonbit.sh
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - run: moon version --all
+      - name: Consume exact published version without a workspace override
+        run: python3 tools/check_consumer.py --source registry --version 0.1.0

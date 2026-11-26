@@ -30,4 +30,4 @@ python3 tools/release.py --output ../releases/MoonCrowd-0.1.0.zip
 
 ORCA 与线性规划核心归属于上游，采用 Apache-2.0 并保留 NOTICE。局部速度选择不保证任意场景无碰撞、无拥堵或全部到达；本版没有全局寻路、接触力或连续碰撞检测。检查点只保存库状态，完整应用回放仍需宿主输入。
 
-**GitHub Release 与 Mooncakes 是两种发布。此版本准备了 GitHub 源码/离线演示交付；Mooncakes 尚未发布，注册表安装验证尚未执行。** 具体发布步骤见 [PUBLISHING.md](https://github.com/youyong5/MoonCrowd/blob/main/docs/PUBLISHING.md)。Windows/macOS 和大规模实时性能尚未实测。
+**GitHub 源码/离线演示与 Mooncakes 0.1.0 均已发布。注册表精确版本 `youyong5/mooncrowd@0.1.0` 已实际下载，无工作区覆盖的外部消费者在四后端各 3/3 通过。** 发布包来源及校验和见 [REGISTRY-VALIDATION.md](https://github.com/youyong5/MoonCrowd/blob/main/docs/REGISTRY-VALIDATION.md)。 具体发布步骤见 [PUBLISHING.md](https://github.com/youyong5/MoonCrowd/blob/main/docs/PUBLISHING.md)。Windows/macOS 和大规模实时性能尚未实测。

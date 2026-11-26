@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 — 2026-11-26 (Mooncakes unpublished)
+## 0.1.0 — 2026-11-26 (published on Mooncakes)
 
 - Port pinned RVO2 disc and obstacle ORCA constraints and LP fallback to MoonBit Double.
 - Add deterministic neighbor tree, stable IDs, input/geometry validation and atomic stepping.
@@ -21,3 +21,6 @@
 - Exercise real Chromium desktop, mobile touch/high DPI and offline-file use in CI, including recovery and canvas/layout checks.
 - Keep the compact mobile header source link on one line; cover it in layout checks.
 - Add a manually triggered, successful-CI-gated GitHub Release workflow with checked ZIP and SHA-256 assets.
+
+- Publish youyong5/mooncrowd@0.1.0; verify registry-only consumers on all four backends and compare published files with the Git tag, accounting for Windows line endings.
+- Add continuous verification of the exact published package.

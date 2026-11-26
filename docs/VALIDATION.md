@@ -78,13 +78,18 @@ moonrun 0.1.20261119 (738607b 2026-11-19)
 - 自动布局检查确认无页面横向溢出、画布像素尺寸匹配 DPR、画布包含可见个体像素，且没有页面异常、控制台错误或静态资源请求失败。报告和三张完整页面截图在该运行的 `mooncrowd-browser-report` 附件中。
 - 修复了重置后沿用旧播放状态，以及数量变更失败后控件与实际场景不一致的问题。原 DOM stub 故障注入也加入这两条回归。
 - 实际检查了上述桌面与手机截图；手机页头文字存在拥挤换行，已精简手机页头并加入来源链接单行布局检查，最终结果由后续提交 CI 验证。
-- 当前本地没有 Mooncakes 登录凭据，`moon publish --dry-run --frozen` 返回 `Registry login is required; run moon login`。注册表发布和发布后外部安装均未完成，不能用 ZIP 消费通过代替。
+- 发布前，本地没有 Mooncakes 登录凭据，`moon publish --dry-run --frozen` 返回 `Registry login is required; run moon login`。当时注册表发布和发布后外部安装未完成；该阻塞现已解除，结果见以下发布后记录。
 
 发布流程与三种消费验证的区别见 [PUBLISHING.md](PUBLISHING.md)。GitHub Release 工作流需在相同提交 CI 成功后显式运行，版本必须与清单一致，且不得覆盖已有标签。
 
+## 2026-11-26：Mooncakes 发布后验证完成
+
+已实际更新注册表索引并下载 `youyong5/mooncrowd@0.1.0`。在没有 `moon.work` 源码覆盖的临时消费者中，wasm、wasm-gc、js、native 各 **3/3** 通过。注册表 ZIP 校验和与索引一致，39 个文件除 Windows CRLF/LF 行尾外与 GitHub v0.1.0 一致。命令、校验和、源码提交与行为覆盖见 [REGISTRY-VALIDATION.md](REGISTRY-VALIDATION.md)。
+
+CI 新增 `published-package` 作业，持续消费该精确已发布版本。申报书第八章第六项已有实际完成证据。
+
 ## 尚未验证或完成
 
-- 人工主观视觉、其他浏览器内核及完整无障碍验收：未完成。已通过的 Chromium 自动交互与布局范围见下述补充，不将其扩大为所有设备或使用条件的保证。
+- 人工主观视觉、其他浏览器内核及完整无障碍验收：未完成。已通过的 Chromium 自动交互与布局范围见上述补充，不将其扩大为所有设备或使用条件的保证。
 - Windows/macOS、硬件差异、大规模实时吞吐：未实测。不提供 FPS 或万人实时性能结论。
-- Mooncakes：未发布；本地打包通过不等于注册表发布成功。
 - 没有运行 LLVM、GUI 原生框架、WebGL 或真实机器人硬件。

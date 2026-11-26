@@ -5,15 +5,17 @@
 维护者在 Actions 的 `Publish checked GitHub release` 工作流中选择 `main` 和 `0.1.0` 后运行。工作流验证：
 
 1. 请求版本与 `moon.mod` 完全一致。
-2. 当前提交已有成功的 `MoonCrowd checks` CI，包含四后端、固定上游参考和真实 Chromium 三个作业。
+2. 当前提交已有成功的 `MoonCrowd checks` CI，包含源码四后端、固定上游参考、真实 Chromium 和已发布包消费四个作业。
 3. 版本标签尚不存在，避免覆盖已有发布。
 4. 重新执行统一交付检查，产出源码、离线网页、历史与文件校验清单。
 
 随后在当前提交创建版本标签，并上传 ZIP 与 SHA-256 文件。这个流程不使用 Mooncakes 凭据，也不自动发布注册表。
 
-## Mooncakes 发布（尚待账号登录后执行）
+## Mooncakes 发布（0.1.0 已完成）
 
-本地已验证实际打包 ZIP 可作为独立模块由公开 API 消费。当前执行环境没有 Mooncakes 登录凭据；`moon publish --dry-run --frozen` 返回需要 `moon login`，因此不能将预检或注册表发布写成成功。
+2026-11-26，账号持有者从 GitHub v0.1.0 发布成功。随后本环境实际更新索引、下载注册表 0.1.0，并完成无工作区覆盖的独立消费，四后端各 3/3。包内容与版本标签核对结果见 [REGISTRY-VALIDATION.md](REGISTRY-VALIDATION.md)。
+
+下列命令记录发布流程；**0.1.0 已存在，不要重复发布该版本**。后续版本须先更新清单、完成验证并建立对应版本记录。
 
 在有 `youyong5` 发布权限的终端中，从公开仓库的目标版本操作：
 
