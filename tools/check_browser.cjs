@@ -46,11 +46,14 @@ async function layout(page) {
       const [r, g, b, a] = data.slice(i, i + 4);
       if (a && ((r > 90 && r < 180 && g > 180 && b > 150) || (r > 210 && g > 130 && g < 200 && b > 100 && b < 180))) agentPixels++;
     }
-    return {overflow: document.documentElement.scrollWidth > innerWidth + 1,
+    const docs = document.querySelector('header .docs');
+    const headerLinkLines = docs.getBoundingClientRect().height / parseFloat(getComputedStyle(docs).lineHeight);
+    return {overflow: document.documentElement.scrollWidth > innerWidth + 1, headerLinkLines,
       cssWidth: box.width, cssHeight: box.height, pixelWidth: canvas.width, pixelHeight: canvas.height,
       ratio: devicePixelRatio, agentPixels};
   });
   assert.equal(measured.overflow, false, 'page must not overflow horizontally');
+  assert.ok(measured.headerLinkLines <= 1.1, 'header source link must remain on one line');
   assert.ok(measured.cssWidth > 100 && measured.cssHeight > 100);
   assert.ok(Math.abs(measured.pixelWidth - measured.cssWidth * measured.ratio) <= 1);
   assert.ok(Math.abs(measured.pixelHeight - measured.cssHeight * measured.ratio) <= 1);

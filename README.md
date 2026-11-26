@@ -4,7 +4,7 @@
 
 MoonCrowd 为游戏、仿真和交互程序提供可独立调用的圆形移动体避障、静态障碍约束、邻居查询与固定时间步仿真。核心用 MoonBit 实现，不依赖浏览器、C++ 动态库、服务器或特定游戏引擎。网页与命令行程序都是公共 API 的消费者。
 
-当前为 **0.1.0 开发版本**，源码已公开至 [GitHub](https://github.com/youyong5/MoonCrowd)，尚未发布 Mooncakes。下文提供完整复现方式；发布后的包名计划为 `youyong5/mooncrowd`。首次远程导入的提交映射和原始历史恢复方式见 [GIT_IMPORT.md](docs/GIT_IMPORT.md)。
+当前版本为 **0.1.0**，源码已公开至 [GitHub](https://github.com/youyong5/MoonCrowd)，尚未发布 Mooncakes。下文提供完整复现方式；发布后的包名计划为 `youyong5/mooncrowd`。首次远程导入的提交映射和原始历史恢复方式见 [GIT_IMPORT.md](docs/GIT_IMPORT.md)。
 
 ## 核心能力
 
@@ -91,7 +91,7 @@ fn main {
 }
 ```
 
-发布后可使用 `moon add youyong5/mooncrowd`。发布前可用 `moon.work` 将本项目与消费者作为两个成员接入；`python3 tools/check_consumer.py` 会自动验证该接入方式，不依赖注册表中的包。
+发布后可使用 `moon add youyong5/mooncrowd`。发布前可用 `moon.work` 将本项目与消费者作为两个成员接入；`python3 tools/check_consumer.py` 会自动验证该接入方式，不依赖注册表中的包。`python3 tools/check_consumer.py --source package` 还会从实际打包 ZIP 验证相同公开接口；发布后使用 `--source registry --version 0.1.0` 验证真实注册表包，详见 [发布与消费验证](docs/PUBLISHING.md)。
 
 ### 静态交互演示
 
@@ -106,7 +106,7 @@ python3 -m http.server 8080 --directory web
 
 网页中的 ORCA 算法由 MoonBit 编译生成，`web/app.js` 仅负责绘制与控制。途经点和侧向偏好位于 `examples/scenes`，属于应用策略。交叉人流和双向狭窄通道是压力场景，可能出现不可行约束与重叠，应观察违反计数。
 
-`web/` 可部署到任意静态托管服务，无数据库、账号或后端 API；本次未执行外网部署。
+`web/` 可部署到任意静态托管服务，无数据库、账号或后端 API；本次未执行外网部署。真实 Chromium CI 已验证桌面、手机触摸/高 DPI 与离线文件的交互、画布和布局；报告与截图见 CI 的 `mooncrowd-browser-report` 附件。
 
 ## 复用模式
 
@@ -145,7 +145,7 @@ python3 tools/release.py --output ../releases/MoonCrowd-0.1.0.zip
 
 脚本会运行格式检查、四后端检查/构建/测试、独立消费者和网页接口测试，然后打包已跟踪源码、编译后的静态演示、Git 历史与 `MANIFEST.sha256` 文件校验清单。未提交或未跟踪的源码会阻止打包，输出目录必须在源码目录之外。该脚本只生成本地交付包，不推送或发布。
 
-演示求解/重置失败时会保留最后成功的画面并停用运行与单步，成功重置后恢复；错误路径也有注入故障的控制逻辑测试。真实浏览器视觉验收的状态仍见验证记录。
+演示求解/重置失败时会保留最后成功的画面并停用运行与单步，成功重置后恢复；错误路径也有注入故障的控制逻辑测试。重置及场景/数量切换成功后会暂停；失败的数量切换恢复已提交数量。真实浏览器验证的范围见验证记录。
 
 ## 许可证
 
@@ -154,3 +154,9 @@ python3 tools/release.py --output ../releases/MoonCrowd-0.1.0.zip
 ## 压缩包中的开发历史
 
 源码交付压缩包另附 `SOURCE_HISTORY.bundle`，保存本地 Git 提交；该文件不是库的运行依赖。需要恢复提交历史时，可在解压目录运行 `git clone SOURCE_HISTORY.bundle ../MoonCrowd-history`。网页编译产物属于交付文件，未提交到源码历史，恢复后可重新构建。
+
+## 真实浏览器测试与版本交付
+
+维护测试使用开发依赖 `playwright@1.62.1`（不进入库或网页运行时）。安装匹配 Chromium 后执行 `node tools/check_browser.cjs`，报告默认保存到 `_build/browser-report/`。GitHub CI 自动执行三种浏览器接入测试，覆盖操作、触摸选择、高 DPI 画布、横向溢出、离线加载与注入故障后的恢复。
+
+[GitHub Releases](https://github.com/youyong5/MoonCrowd/releases) 提供版本交付入口；维护者可运行受同提交成功 CI 约束的发布工作流，生成 ZIP 与 SHA-256。Mooncakes 登录、发布及注册表消费验证独立进行，步骤见 [PUBLISHING.md](docs/PUBLISHING.md)。

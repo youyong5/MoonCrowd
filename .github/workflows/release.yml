@@ -1,0 +1,62 @@
+name: Publish checked GitHub release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact version from moon.mod (without v)
+        required: true
+        default: '0.1.0'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  github-release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Require matching version and successful CI for this exact commit
+        run: |
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          version=os.environ['VERSION']
+          actual=re.search(r'^version\s*=\s*"([^"]+)"',Path('moon.mod').read_text(),re.M).group(1)
+          if not re.fullmatch(r'\d+\.\d+\.\d+',version) or version!=actual:
+              raise SystemExit('Release version must match moon.mod exactly')
+          PY
+          test "$(gh run list --workflow ci.yml --commit "$GITHUB_SHA" --status success --limit 1 --json databaseId --jq length)" -ge 1
+          if git show-ref --verify --quiet "refs/tags/v$VERSION"; then
+            echo 'Release tag already exists; refusing to overwrite it.'
+            exit 1
+          fi
+      - name: Install official current MoonBit toolchain
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh -o /tmp/install-moonbit.sh
+          bash /tmp/install-moonbit.sh
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Build verified source and offline demo archive
+        run: |
+          python3 tools/release.py --output "../releases/MoonCrowd-$VERSION.zip"
+          (cd ../releases && sha256sum "MoonCrowd-$VERSION.zip" > "MoonCrowd-$VERSION.zip.sha256")
+      - name: Publish version tag and checked release assets
+        run: |
+          gh release create "v$VERSION" \
+            "../releases/MoonCrowd-$VERSION.zip" \
+            "../releases/MoonCrowd-$VERSION.zip.sha256" \
+            --target "$GITHUB_SHA" \
+            --title "MoonCrowd $VERSION" \
+            --notes-file "docs/RELEASE-$VERSION.md"

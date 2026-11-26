@@ -1,6 +1,6 @@
 # 0.1.0 验证记录
 
-日期：2026-11-24。下表记录本地 Linux x86_64 验证，远程 GitHub Actions 结果另列并关联到具体提交。
+初版日期：2026-11-24；最近补充：2026-11-26。验证环境为 Linux x86_64；远程结果关联到具体提交。
 
 ## 工具链
 
@@ -22,7 +22,7 @@ moonrun 0.1.20261119 (738607b 2026-11-19)
 | `moon check --target all --deny-warn` | 通过 |
 | `moon build --target all --deny-warn` | 通过 |
 | `moon test --target all --deny-warn` | 四后端各 61/61 |
-| `python3 tools/check_consumer.py` | 独立模块公共 API 测试，四后端各 1/1 |
+| `python3 tools/check_consumer.py` | 独立模块公共 API 测试，工作区与实际打包 ZIP 两种来源四后端各 3/3 |
 | `moon run examples/cli --target native --release` | 三种场景均完成 400 步并输出诊断 |
 | `python3 tools/build_web.py` | 真实 MoonBit JS 产物构建成功 |
 | `node tools/smoke_web.cjs` | 三场景各 80 步；DOM stub 下控制逻辑及故障后停用/恢复通过；JS 独立计算全部圆盘净空及重叠数并与适配输出对照 |
@@ -67,9 +67,24 @@ moonrun 0.1.20261119 (738607b 2026-11-19)
 
 开发过程中还用原版 RVO2 运行过相同密集环形压力设置，观察到重叠；这说明不能仅凭短程数值对照推断所有群体场景的碰撞保证。临时排查程序不作为公开 API 或正式基准。
 
+## 2026-11-26：初审后开发与发布准备
+
+已核验 [三作业 CI](https://github.com/youyong5/MoonCrowd/actions/runs/45775876884)，对应提交 `d7f0b155dcee0a1081ada8fc426b77f783cf1fa7`，四后端、固定上游参考、真实 Chromium 三个作业均成功。
+
+- 核心库测试仍为四后端各 **61/61**，未将消费测试或比较分量重复计入。
+- 独立消费覆盖公开运动与检查点恢复、重复 ID 批次拒绝的原子性、禁用邻居且零明细时的完整重叠统计。工作区与 `moon package` 实际 ZIP 两种来源，均为四后端各 **3/3**。
+- 真实 Chromium 使用 Playwright 1.62.1。桌面为 1440×1000、DPR 1；手机为 390×844、DPR 3，并启用触摸。
+- 桌面 HTTP、手机触摸 HTTP 和离线 `file://` 三种接入均通过：实际选中圆盘、键盘单步、播放/暂停、运行中重置、场景切换、数量变更、轨迹/速度开关、重置与求解失败的控件停用及恢复。
+- 自动布局检查确认无页面横向溢出、画布像素尺寸匹配 DPR、画布包含可见个体像素，且没有页面异常、控制台错误或静态资源请求失败。报告和三张完整页面截图在该运行的 `mooncrowd-browser-report` 附件中。
+- 修复了重置后沿用旧播放状态，以及数量变更失败后控件与实际场景不一致的问题。原 DOM stub 故障注入也加入这两条回归。
+- 实际检查了上述桌面与手机截图；手机页头文字存在拥挤换行，已精简手机页头并加入来源链接单行布局检查，最终结果由后续提交 CI 验证。
+- 当前本地没有 Mooncakes 登录凭据，`moon publish --dry-run --frozen` 返回 `Registry login is required; run moon login`。注册表发布和发布后外部安装均未完成，不能用 ZIP 消费通过代替。
+
+发布流程与三种消费验证的区别见 [PUBLISHING.md](PUBLISHING.md)。GitHub Release 工作流需在相同提交 CI 成功后显式运行，版本必须与清单一致，且不得覆盖已有标签。
+
 ## 尚未验证或完成
 
-- 真实浏览器视觉、移动端布局与完整鼠标交互验收：未完成。直接 Chromium 在当前执行权限下无法启动；云浏览器不允许打开本地文件。未将 Node DOM stub 当成真实浏览器测试。
+- 人工主观视觉、其他浏览器内核及完整无障碍验收：未完成。已通过的 Chromium 自动交互与布局范围见下述补充，不将其扩大为所有设备或使用条件的保证。
 - Windows/macOS、硬件差异、大规模实时吞吐：未实测。不提供 FPS 或万人实时性能结论。
 - Mooncakes：未发布；本地打包通过不等于注册表发布成功。
 - 没有运行 LLVM、GUI 原生框架、WebGL 或真实机器人硬件。
