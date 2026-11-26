@@ -43,3 +43,29 @@ jobs:
         run: |
           python3 tools/test_oracle_verifier.py
           python3 tools/generate_oracle.py --upstream /tmp/rvo2-reference --check
+  real-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install official current MoonBit toolchain
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh -o /tmp/install-moonbit.sh
+          bash /tmp/install-moonbit.sh
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - run: python3 tools/build_web.py
+      - name: Install pinned development-only browser test dependency
+        run: |
+          npm install --ignore-scripts --no-audit --no-fund --prefix /tmp/mooncrowd-browser playwright@1.62.1
+          /tmp/mooncrowd-browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise desktop, mobile touch and offline-file controls
+        run: NODE_PATH=/tmp/mooncrowd-browser/node_modules node tools/check_browser.cjs
+      - uses: actions/upload-artifact@v5
+        if: ${{ !cancelled() }}
+        with:
+          name: mooncrowd-browser-report
+          path: _build/browser-report/
+          retention-days: 14

@@ -25,6 +25,9 @@
       if (!globalThis.MoonCrowd) throw new Error('请先运行 python3 tools/build_web.py 生成 MoonBit 演示。');
       const next = decode(MoonCrowd.reset(candidateKind, Number($('count').value)));
       state = next; kind = candidateKind; faulted = false;
+      running = false;
+      $('count').value = String(state.agents.length);
+      $('count-value').textContent = state.agents.length;
       $('play').disabled = false; $('step').disabled = false;
       for(const button of document.querySelectorAll('[data-scene]'))button.setAttribute('aria-pressed',String(Number(button.dataset.scene)===kind));
       selected = null; history.clear(); accumulator = 0;
@@ -32,7 +35,14 @@
       $('scene-name').textContent = names[kind];
       $('description').textContent = descriptions[kind];
       update(); draw();
-    } catch (err) { fail(err); }
+    } catch (err) {
+      // Keep count controls consistent with the last committed scene on failure.
+      if (state) {
+        $('count').value = String(state.agents.length);
+        $('count-value').textContent = state.agents.length;
+      }
+      fail(err);
+    }
   }
   function advance() {
     if (faulted || !state) return;

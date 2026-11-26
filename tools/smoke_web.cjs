@@ -58,6 +58,12 @@ assert.equal(elements.arrived.textContent,'0 / 36');
 assert.equal(elements.error.hidden,true);
 assert.equal(elements.overlaps.textContent,'0');
 assert.ok(Number.isFinite(Number(elements.clearance.textContent)));
+elements.play.onclick();
+assert.equal(elements.status.textContent,'运行中');
+elements.reset.onclick();
+assert.equal(elements.status.textContent,'已暂停');
+frames.shift()(1000);
+assert.equal(elements.ticks.textContent,'0','reset must stop the previous playback loop');
 // Fault injection exercises the same controls after a real compiled adapter run.
 const originalStep=api.step,originalReset=api.reset;
 const lastTick=elements.ticks.textContent;
@@ -76,6 +82,10 @@ assert.equal(elements.error.hidden,true);assert.equal(elements.play.disabled,fal
 elements.step.onclick();assert.equal(elements.ticks.textContent,'1');
 const previousScene=elements['scene-name'].textContent;
 api.reset=()=>JSON.stringify({error:'injected reset failure'});
+elements.count.value='48';elements.count.oninput();elements.count.onchange();
+assert.equal(elements.count.value,'36','failed count change must restore committed count');
+assert.equal(elements['count-value'].textContent,'36');
+assert.equal(elements.arrived.textContent,'0 / 36');
 buttons[0].onclick();
 assert.equal(elements['scene-name'].textContent,previousScene);
 assert.equal(buttons[2]['aria-pressed'],'true');
