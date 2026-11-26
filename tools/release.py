@@ -54,6 +54,7 @@ def main():
         ['moon', 'build', '--target', 'all', '--deny-warn'],
         ['moon', 'test', '--target', 'all', '--deny-warn'],
         ['python3', 'tools/check_consumer.py'],
+        ['python3', 'tools/check_consumer.py', '--source', 'package'],
         ['python3', 'tools/build_web.py'],
         ['node', 'tools/smoke_web.cjs'],
     ]:

@@ -22,6 +22,7 @@ jobs:
       - run: moon test --target all --deny-warn
       - run: moon run examples/cli --target native --release
       - run: python3 tools/check_consumer.py
+      - run: python3 tools/check_consumer.py --source package
       - run: python3 tools/build_web.py
       - run: node tools/smoke_web.cjs
   reference-oracle:
