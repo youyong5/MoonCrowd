@@ -1,16 +1,18 @@
 # 0.1.0 验证记录
 
-初版日期：2026-11-24；最近补充：2026-11-26。验证环境为 Linux x86_64；远程结果关联到具体提交。
+初版日期：2026-11-24；最近补充：2026-11-27。验证环境为 Linux x86_64；远程结果关联到具体提交。
 
 ## 工具链
 
-从官方 current/latest 工具链下载并验证：
+2026-11-27 从官方 current/latest 下载的工具链，实际版本为：
 
 ```text
-moon 0.1.20261119 (738607b 2026-11-19)
-moonc v0.10.22+124d61d05 (2026-11-19)
-moonrun 0.1.20261119 (738607b 2026-11-19)
+moon 0.1.20261126 (ccd306a 2026-11-26)
+moonc v1.0.0-rc1+3c0520448 (2026-11-26)
+moonrun 0.1.20261126 (ccd306a 2026-11-26)
 ```
+
+本次满足验收门槛 `moonc >= 1.0.0-rc1`。2026-11-26 及以前的历史验证使用 `moon/moonrun 0.1.20261119`、`moonc v0.10.22+124d61d05`，不能单独作为新版本门槛的证据。
 
 本版本采用 `moon.mod` 和 `moon.pkg`；没有宣称支持旧工具链。Native 使用宿主 C 编译器；上游 oracle 使用 G++。`--target all` 涵盖 wasm / wasm-gc / js / native，不涵盖未声明的 LLVM 等实验目标。
 
@@ -87,6 +89,18 @@ moonrun 0.1.20261119 (738607b 2026-11-19)
 已实际更新注册表索引并下载 `youyong5/mooncrowd@0.1.0`。在没有 `moon.work` 源码覆盖的临时消费者中，wasm、wasm-gc、js、native 各 **3/3** 通过。注册表 ZIP 校验和与索引一致，39 个文件除 Windows CRLF/LF 行尾外与 GitHub v0.1.0 一致。命令、校验和、源码提交与行为覆盖见 [REGISTRY-VALIDATION.md](REGISTRY-VALIDATION.md)。
 
 CI 新增 `published-package` 作业，持续消费该精确已发布版本。申报书第八章第六项已有实际完成证据。
+
+## 2026-11-27：1.0.0-rc1 验收复核
+
+本地使用独立官方工具链，在提交 `39b67fc226fc4761974fc49aa55b4aae94b2a609` 的干净工作树中重新执行验证，没有修改求解器源码或已发布版本。
+
+- `moon fmt --check`、`moon check --target all --deny-warn`、`moon build --target all --deny-warn`、`moon test --target all --deny-warn` 全部通过；四后端各 **61/61**。
+- Native CLI 的三种场景均运行 400 步，结果与上表一致；交叉人流和狭窄通道仍是存在重叠的压力场景。
+- 工作区、实际打包 ZIP、精确注册表 `0.1.0` 三种来源的独立消费均通过，四后端各 **3/3**。注册表模式实际更新索引、下载包且没有 `moon.work` 覆盖，详见 [REGISTRY-VALIDATION.md](REGISTRY-VALIDATION.md)。
+- 5 项 Python 核验器回归测试通过；固定上游 `generate_oracle.py --check` 核对 9,216 个分量，最大重生成差异为 0，JSON 派生 MoonBit 断言逐字节匹配。
+- 网页重新编译成功；Node DOM stub 验证三场景各 80 步、控制逻辑和故障恢复通过。该项不包含真实浏览器布局断言。
+
+同一提交的 [核心 CI 重跑作业](https://github.com/youyong5/MoonCrowd/actions/runs/45782875528/job/140374611816) 已成功，公开日志确认 `moonc v1.0.0-rc1+3c0520448`，并完成格式、四后端检查/构建/测试、CLI、工作区与打包 ZIP 消费、网页构建及 Node DOM stub 检查。该运行的参考核验、真实 Chromium 和注册表作业沿用此前成功结果；本次没有将它们描述为新工具链下重新执行的远程作业。新工具链下的参考核验与注册表消费由上述本地实测补充，真实 Chromium 的已验证范围仍以 2026-11-26 记录为准。
 
 ## 尚未验证或完成
 

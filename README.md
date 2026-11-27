@@ -48,7 +48,9 @@ MoonCrowd 面向 MoonBit 的新增工程能力包括：渲染无关 API、严格
 
 ## 工具链与运行
 
-已在 Linux x86_64 验证：`moon 0.1.20261119`、`moonc v0.10.22+124d61d05`、`moonrun 0.1.20261119`。
+2026-11-27 已在 Linux x86_64 验证：`moon 0.1.20261126`、`moonc v1.0.0-rc1+3c0520448`、`moonrun 0.1.20261126`，满足本次验收的 `moonc >= 1.0.0-rc1` 要求。
+
+本地与 [GitHub 核心 CI 作业](https://github.com/youyong5/MoonCrowd/actions/runs/45782875528/job/140374611816) 均完成新工具链下的四后端检查、构建和测试（各 61/61），以及 CLI、工作区/打包 ZIP 消费和网页构建验证；已发布 `0.1.0` 也在本地以新工具链完成注册表独立消费（各 3/3）。完整范围及历史记录见 [VALIDATION.md](docs/VALIDATION.md)。
 
 使用 [官方安装方式](https://www.moonbitlang.com/download/) 安装工具链。项目采用当前 `moon.mod` / `moon.pkg` 格式。Native 构建还需要宿主 C 编译器；本次没有验证 Windows/macOS。
 
